@@ -430,6 +430,18 @@ router.get("/getConsolidatedGraph", async (req, res) => {
             value: item.value == null ? "1" : item.value,
           }));
           dd.json_data = dataLabel;
+          let x;
+          if (dd.chartType === "1" && dd.chartElements.pieChart.total) {
+            x = await axios.get(`http://localhost:8000/api/getSum`, {
+              params: {
+                chartSource: dd.chartSource,
+                field1: dd.chartElements.pieChart.measure,
+              },
+            });
+            const res = x.data;
+            const totalSum = res.data[0].totalSum;
+            dd.chartElements.pieChart.getSum = totalSum;
+          }
         } else if (dd.chartBasic === "2") {
           let x;
           if (dd.chartNum === "1") {
@@ -475,6 +487,7 @@ router.get("/getConsolidatedGraph", async (req, res) => {
 //   }
 // });
 
+///soft delete
 // router.patch("/deleteGraph/:id", async (req, res) => {
 //   try {
 //     const graphId = req.body;

@@ -46,8 +46,7 @@
   border-radius: 4px;
   padding: 10px 20px;
   cursor: pointer;
-  margin-right: 90%;
-  width: auto;
+  margin-right: 92%;
 }
 
 .graphPanda {
@@ -166,11 +165,11 @@
   margin-right: 10px;
 }
 .edit-icon:hover {
-  content: url("./assets/editRed.png");
+  content: url("../../assets/editRed.png");
 }
 
 .delete-icon:hover {
-  content: url("./assets/deleteRed.png");
+  content: url("../../assets/deleteRed.png");
 }
 .main-source-icon {
   width: 24px;

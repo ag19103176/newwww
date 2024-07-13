@@ -1,31 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import PieChart from "./Components/Graph/pieChart.js";
 import DataDisplayComponent from "./Components/DataDisplayAxes/CommonDisplay.js";
-import BarChart from "./Components/Graph/barChart.js";
-import LineChart from "./Components/Graph/lineChart.js";
 import Loader from "./Components/Loader/loader.js";
-import AvgDisplay from "./Components/DataDisplayAxes/avgDisplay.js";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import "./App.css";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
-import SumDisplay from "./Components/DataDisplayAxes/sumDisplay.js";
+import ChartCard from "./Components/AppComponents/ChartCard.js";
 import sourceIcon from "./assets/source.png";
 import graphIcon from "./assets/graph.png";
 import customer from "./assets/customer.png";
 import invoice from "./assets/invoice.png";
-import numeric from "./assets/numeric.png";
-import line from "./assets/line.png";
-import pie from "./assets/pie.png";
 import dashlet from "./assets/dashlet.png";
 import refreshIcon from "./assets/refresh.png";
 import reorderIcon from "./assets/reorder.png";
-import editIcon from "./assets/edit.png";
-import deleteIcon from "./assets/delete.png";
 import tick from "./assets/tick.png";
-import redTick from "./assets/redTick.png";
-import Select, { StylesConfig } from "react-select";
 const mongoose = require("mongoose");
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -95,7 +84,7 @@ function App() {
 
   const handleRefreshClick = (val) => {
     setRefresh(val);
-    // console.log("here");
+    if (val === 0) return;
     setInterval(() => {
       setGraph(!graph);
     }, val * 1000);
@@ -132,9 +121,7 @@ function App() {
     setSelectedSource(graphData.chartSource);
     setIdentify(graphData.chartBasic);
     setNum(graphData.chartNum);
-
     setType(graphData.chartType);
-    // setNum(graphData.abc);
     setId(graphData._id);
     if (graphData.chartType === "1") {
       console.log(graphData.chartElements.pieChart.dimension);
@@ -202,17 +189,13 @@ function App() {
           barLineChart: {
             xaxis: dim,
             yaxis: measure,
-
             goalLine: goalLine,
             goalValue: goalValue,
-            // goalLabel: goalLabel,
             showValues: showValues,
             valueToShow: valueToShow,
             showLabel: showLabel,
-            // xlabel: xlabel,
             showLineAndMarks: showLineAndMarks,
             yShowLabel: yShowLabel,
-            // yLabel: yLabel,
             yshowLineAndMarks: yshowLineAndMarks,
           },
         };
@@ -225,7 +208,6 @@ function App() {
         console.log(requestData);
         await axios.post("http://localhost:8000/api/saveGraph", requestData);
       } else {
-        // requestData._id = objid;
         await axios.patch("http://localhost:8000/api/saveGraph", requestData);
       }
 
@@ -278,14 +260,11 @@ function App() {
             yaxis: measure,
             goalLine: goalLine,
             goalValue: goalValue,
-            // goalLabel: goalLabel,
             showValues: showValues,
             valueToShow: valueToShow,
             showLabel: showLabel,
-            // xlabel: xlabel,
             showLineAndMarks: showLineAndMarks,
             yShowLabel: yShowLabel,
-            // yLabel: yLabel,
             yshowLineAndMarks: yshowLineAndMarks,
           },
         };
@@ -320,7 +299,6 @@ function App() {
   };
 
   const handleEditCount = async (graphData) => {
-    // console.log("edit coint", graphData);
     setLoading(true);
     setSelectedSource(graphData.chartSource);
     setIdentify(graphData.chartBasic);
@@ -360,7 +338,6 @@ function App() {
       };
       console.log("generate", requestData);
       await axios.patch("http://localhost:8000/api/saveGraph", requestData);
-
       setGraph(!graph);
       setNum("");
       setShowModal(false);
@@ -399,7 +376,6 @@ function App() {
       requestData.chartElements = {
         sumChart: {
           field: dim,
-          // getSum: totalSum,
         },
       };
       await axios.patch(
@@ -507,13 +483,7 @@ function App() {
     return { x: maxX, y: maxY, h: 5.7, w: 4 };
   };
   const handleLayout = (graphs) => {
-    // const { x, y, h, w } = generateLayout(graphs);
     return graphs.map((graph, index) => ({
-      // i: graph.id?.toString() || index.toString(),
-      // x: (index % 3) * 4,
-      // y: Math.floor(index / 3) * 6,
-      // w: 4,
-      // h: 5.7,
       i: graph.id?.toString() || index.toString(),
       x: graph.layout.x ? graph.layout.x : (index % 3) * 4,
       y: graph.layout.y ? graph.layout.y * 6 : Math.floor(index / 3) * 6,
@@ -658,44 +628,9 @@ function App() {
                   <img src={tick} alt="Refresh Icon" className="tick-icon" />
                   Off
                 </div>
-                <div
-                  className="popup-option"
-                  onClick={() => handleRefreshClick(5)}
-                >
-                  <img src={tick} alt="Refresh Icon" className="tick-icon" />5
-                  minutes
-                </div>
-                <div
-                  className="popup-option"
-                  onClick={() => handleRefreshClick(10)}
-                >
-                  {" "}
-                  <img src={tick} alt="Refresh Icon" className="tick-icon" />
-                  10 minutes
-                </div>
-                <div
-                  className="popup-option"
-                  onClick={() => handleRefreshClick(15)}
-                >
-                  {" "}
-                  <img src={tick} alt="Refresh Icon" className="tick-icon" />
-                  15 minutes
-                </div>
               </div>
             )}
           </div>
-
-          {/* <div className="rearrange">
-            <label>Resize/Rearrange</label>
-            <label className="switch">
-              <input
-                type="checkbox"
-                onChange={handleToggleDragDrop}
-                checked={isDraggable}
-              />
-              <span className="slider round"></span>
-            </label>
-          </div> */}
         </div>
 
         {addButton && showModal && (
@@ -986,97 +921,16 @@ function App() {
               data-grid={handleLayout(displayGraph)[index]}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="black">
-                <div className="Btn">
-                  <div className="label-black">
-                    {d.chartType === "1" && (
-                      <span>
-                        <img
-                          src={pie}
-                          alt="Pie Chart Icon"
-                          className="source-icon"
-                        />
-                        Pie Chart
-                      </span>
-                    )}
-                    {d.chartType === "2" && (
-                      <span>
-                        <img
-                          src={line}
-                          alt="Bar Chart Icon"
-                          className="source-icon"
-                        />
-                        Bar Chart
-                      </span>
-                    )}
-                    {d.chartType === "3" && (
-                      <span>
-                        <img
-                          src={line}
-                          alt="Line Chart Icon"
-                          className="source-icon"
-                        />
-                        Line Chart
-                      </span>
-                    )}
-                    {d.chartBasic === "2" && d.chartNum === "1" && (
-                      <span>
-                        <img
-                          src={numeric}
-                          alt="Numeric Icon"
-                          className="source-icon"
-                        />
-                        Numeric
-                      </span>
-                    )}
-                    {d.chartBasic === "2" && d.chartNum === "2" && (
-                      <span>
-                        <img
-                          src={numeric}
-                          alt="Numeric Icon"
-                          className="source-icon"
-                        />
-                        Numeric
-                      </span>
-                    )}
-                  </div>
-                  <div
-                    onClick={() => {
-                      d.chartBasic === "1" ? handleEdit(d) : handleEditCount(d);
-                    }}
-                  >
-                    <img
-                      src={editIcon}
-                      alt="Source Icon"
-                      className="source-icon"
-                    />
-                  </div>
-                  <div
-                    onClick={() => {
-                      handleDelete(d._id);
-                    }}
-                  >
-                    <img
-                      src={deleteIcon}
-                      alt="Source Icon"
-                      className="source-icon"
-                    />
-                  </div>
-                </div>
-              </div>
-              {d.chartType === "1" ? (
-                <PieChart data={d} />
-              ) : d.chartType === "2" ? (
-                <BarChart data={d} />
-              ) : d.chartType === "3" ? (
-                <LineChart data={d} />
-              ) : d.chartBasic === "2" && d.chartNum === "1" ? (
-                <SumDisplay totalSum={d} />
-              ) : d.chartBasic === "2" && d.chartNum === "2" ? (
-                <AvgDisplay totalSum={d} />
-              ) : (
-                <div>Invalid chart type</div>
-              )}
+              <ChartCard
+                key={d._id}
+                d={{ ...d, index }}
+                layout={layout}
+                displayGraph={displayGraph}
+                handleLayout={handleLayout}
+                handleEdit={handleEdit}
+                handleEditCount={handleEditCount}
+                handleDelete={handleDelete}
+              />
             </div>
           ))}
       </ResponsiveReactGridLayout>

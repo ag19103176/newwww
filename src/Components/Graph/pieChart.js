@@ -7,28 +7,14 @@ import "./toggle.css";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CustomPieChart = ({ data }) => {
+  console.log(data);
   const [currentPage, setCurrentPage] = useState(0);
-  const [pieTotal, setPieTotal] = useState();
-
-  // console.log(data.json_data);
   const itemsPerPage = 10;
 
   const l = data.json_data.map((d) => d.label);
   const v = data.json_data.map((d) => d.value);
-  // console.log("l= ", l);
-
   const totalItems = l.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const getTotal = async () => {
-    const x = await axios.get(
-      `http://localhost:8000/api/getSum?chartSource=${data.chartSource}&field1=${data.chartElements.pieChart.measure}`
-    );
-    // const res = await x.j();
-    console.log(x);
-    const totalMes = x.data.data[0].totalSum;
-    console.log(totalMes);
-    setPieTotal(totalMes);
-  };
   const handlePrevious = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
@@ -90,12 +76,16 @@ const CustomPieChart = ({ data }) => {
   return (
     <div className="chart-body">
       <Pie data={dd} options={options} width={300} height={500} />
+
       {data.chartElements.pieChart.total && (
         <div>
-          <button onClick={getTotal}></button>
-          {pieTotal}
+          Total:
+          {data.chartElements.pieChart.total
+            ? data.chartElements.pieChart.getSum
+            : ""}
         </div>
       )}
+
       {data.chartElements.pieChart.legend && (
         <div className="custom-legend">
           {paginatedLegendItems.map((item, index) => (

@@ -82,7 +82,7 @@ function App() {
   const [goalValue, setGoalValue] = useState("");
   const [goalLabel, setGoalLabel] = useState("");
   const [valueToShow, setRadioshowValues] = useState("");
-  const [identify, setIdentify] = useState(1);
+  const [identify, setIdentify] = useState();
   const [totalSum, setTotalSum] = useState(0);
   const [showLabel, setShowLabel] = useState(true);
   const [yShowLabel, setyShowLabel] = useState(true);
@@ -128,14 +128,16 @@ function App() {
 
   const handleEdit = async (graphData) => {
     setLoading(true);
+    console.log(graphData);
     setSelectedSource(graphData.chartSource);
     setIdentify(graphData.chartBasic);
     setNum(graphData.chartNum);
 
     setType(graphData.chartType);
-    setNum(graphData.abc);
+    // setNum(graphData.abc);
     setId(graphData._id);
     if (graphData.chartType === "1") {
+      console.log(graphData.chartElements.pieChart.dimension);
       setDim(graphData.chartElements.pieChart.dimension);
       setMeasure(graphData.chartElements.pieChart.measure);
       setLegend(graphData.chartElements.pieChart.legend);
@@ -1040,7 +1042,7 @@ function App() {
                   </div>
                   <div
                     onClick={() => {
-                      identify === "1" ? handleEdit(d) : handleEditCount(d);
+                      d.chartBasic === "1" ? handleEdit(d) : handleEditCount(d);
                     }}
                   >
                     <img

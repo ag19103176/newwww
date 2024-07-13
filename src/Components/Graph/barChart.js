@@ -25,7 +25,7 @@ ChartJS.register(
 );
 
 const BarChartWithGoal = ({ data }) => {
-  console.log(data);
+  // console.log(data);
   const labels = data.json_data.map((d) => d.label);
   const values = data.json_data.map((d) => d.value);
   // const goal = data.chartElements.barLineChart.goalValue;

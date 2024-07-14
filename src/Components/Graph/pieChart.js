@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import axios from "axios";
 import "./toggle.css";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CustomPieChart = ({ data }) => {
-  console.log(data);
+  // console.log(data);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
 

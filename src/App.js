@@ -71,7 +71,7 @@ function App() {
   const [goalValue, setGoalValue] = useState("");
   const [goalLabel, setGoalLabel] = useState("");
   const [valueToShow, setRadioshowValues] = useState("");
-  const [identify, setIdentify] = useState();
+  const [identify, setIdentify] = useState("1");
   const [totalSum, setTotalSum] = useState(0);
   const [showLabel, setShowLabel] = useState(true);
   const [yShowLabel, setyShowLabel] = useState(true);
@@ -83,6 +83,7 @@ function App() {
   const [refresh, setRefresh] = useState(0);
 
   const handleRefreshClick = (val) => {
+    setRefreshToggle(false);
     setRefresh(val);
     if (val === 0) return;
     setInterval(() => {
@@ -433,6 +434,7 @@ function App() {
     setShowModal(true);
     setGraphEdit(false);
     setSelectedSource("");
+
     setDim("");
     setMeasure("");
     setIdentify("");
@@ -647,31 +649,21 @@ function App() {
                       <button className="cancel" onClick={handleCancel}>
                         Cancel
                       </button>
-                      {identify === "1" && (
-                        <button
-                          className="generate-button"
-                          onClick={
-                            graphEdit
+
+                      <button
+                        className="generate-button"
+                        onClick={
+                          identify === "1"
+                            ? graphEdit
                               ? handleGenerateEditGraph
                               : handleGenerateGraphClick
-                          }
-                        >
-                          {graphEdit ? "Edit Graph" : "Create"}
-                        </button>
-                      )}
-
-                      {identify === "2" && (
-                        <button
-                          className="generate-button"
-                          onClick={
-                            graphEdit
-                              ? handleGenerateEditCount
-                              : handleGenerateCount
-                          }
-                        >
-                          {graphEdit ? "Edit Count" : "Create"}
-                        </button>
-                      )}
+                            : graphEdit
+                            ? handleGenerateEditCount
+                            : handleGenerateCount
+                        }
+                      >
+                        {graphEdit ? "Edit" : "Create"}
+                      </button>
                     </div>
                   </div>
                 </div>
